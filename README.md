@@ -9,7 +9,6 @@ This project focuses on predicting two specific medical outcomes based on clinic
 ---
 
 ## 1. Description of the Data
-
 The dataset consists of **clinical features** and **genetic markers (SNPs)**.
 
 **Target Variables:**
@@ -17,11 +16,11 @@ The dataset consists of **clinical features** and **genetic markers (SNPs)**.
 - **OUTCOME SEVERITY:** Binary classification  
 - **OUTCOME MACE:** Ordinal classification (3 levels: 0, 1, 2)
 
-**Features:**  
+**Features:**
 
-- Demographic data: `Age_Baseline`, `Genre`  
-- Clinical measurements: `Epaiss_max`, `Gradient`, `FEVG`, `TVNS`, `SYNCOPE`  
-- Genetic markers: `SNP_xxx` series  
+- **Demographic data:** `Age_Baseline`, `Genre`  
+- **Clinical measurements:** `Epaiss_max`, `Gradient`, `FEVG`, `TVNS`, `SYNCOPE`  
+- **Genetic markers:** `SNP_xxx` series  
 
 ---
 
@@ -29,32 +28,49 @@ The dataset consists of **clinical features** and **genetic markers (SNPs)**.
 
 ### Preprocessing
 - **Imputation:** Missing values handled using median imputation via `SimpleImputer`.  
-- **Scaling:** `StandardScaler` applied to SNP data before feature selection to ensure uniform contribution in linear models.  
+- **Scaling:** `StandardScaler` applied to SNP data before feature selection for uniform contribution in linear models.  
 
 ### Feature Selection & Engineering
-- **SNP Filtering:** Initially restrict genetic data to "priority SNPs" (index ≤ 75).  
-- **Consensus Ranking:** A hybrid feature selection combining:
-  - Logistic Regression (L1 or L2 coefficient importance)  
-  - LightGBM (Gini/Gain importance)  
-  - The top 40 SNPs are selected based on the normalized average of these two rankings.  
-- **Polygenic Risk Score (PRS):** A custom PRS feature is engineered by calculating the dot product of the top 40 SNPs and their respective Logistic Regression coefficients.  
+- **SNP Filtering:** Genetic data initially restricted to "priority SNPs" (index ≤ 75).  
+- **Consensus Ranking:** Combines:
+  - **Logistic Regression:** Uses absolute coefficient values for linear importance.  
+  - **Tree Method (LightGBM):** Uses Gini/Gain importance for non-linear contributions.  
+- **Top Feature Selection:** Top 40 SNPs selected based on the normalized average ranking.  
+- **Polygenic Risk Score (PRS):** Custom feature calculated as the dot product of top SNPs and their Logistic Regression coefficients.  
 
 ### Algorithms
-Two distinct modeling paths are used for the two targets:
+Two modeling paths are used:
 
-- **Severity Model:** `LGBMClassifier` with a custom `class_weight` (1.5 for class 0) to handle class imbalance.  
-- **MACE Model:** Treated as an ordinal regression problem. `LGBMRegressor` predicts a continuous score, which is later discretized.  
+- **Severity Model (Logistic & Tree Hybrid):**
+  - `LGBMClassifier` with custom `class_weight` (1.5 for class 0) to handle class imbalance.  
+  - Incorporates `PRS` as a primary feature.  
+
+- **MACE Model (Ordinal via Regression):**
+  - Treated as an ordinal regression problem using `LGBMRegressor`.  
+  - Predicts a continuous score, later discretized into categories.  
 
 ### Postprocessing (Threshold Tuning)
-To optimize the **Quadratic Weighted Kappa (QWK)** for the MACE outcome:
-
-- A validation set (25%) is used to find thresholds `t1` and `t2`.  
-- Continuous regressor output is converted to classes:  
-  - 0 if score < t1  
-  - 1 if t1 ≤ score < t2  
-  - 2 if score ≥ t2  
+- Grid search on a validation set (25%) to find optimal thresholds `t1` and `t2`.  
+- Continuous regressor outputs converted to classes:
+  - **0** if score < t1  
+  - **1** if t1 ≤ score < t2  
+  - **2** if score ≥ t2  
 
 ---
 
-## 3. Performance Metrics
-- **Quadratic Weighted Cohen’s Kappa** is used to evaluate the alignment of predicted MACE categories with the actual values during threshold tuning.
+## 3. Methodological Details
+
+### Logistic Regression
+- Provides **interpretability** and models **linear relationships** in high-dimensional genetic data.  
+- Supplies weights for **Polygenic Risk Score (PRS)**.  
+- Helps prioritize SNPs with strong, direct correlations to outcomes.  
+
+### Tree Methods (LightGBM)
+- Captures **non-linear interactions** and clinical complexities.  
+- `class_weight` manages imbalances in the Severity model.  
+- MACE regression treats ordinal stages (0,1,2) as ordered progression, optimizing **Quadratic Weighted Kappa**.  
+
+---
+
+## 4. Performance Metrics
+- **Quadratic Weighted Cohen’s Kappa:** Primary metric for evaluating alignment of predicted MACE categories with actual outcomes during threshold tuning.
