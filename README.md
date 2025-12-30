@@ -61,10 +61,6 @@ More complex approaches (deep learning, ordinal neural nets) were tested but did
 
 The KMeans consensus step was critical for achieving the final score.
 
-##  The script will generate a submission file:
-
-submission_KMEANS_BOOTSTRAP.csv
-
 
 ---
 
