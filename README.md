@@ -64,10 +64,4 @@ The KMeans consensus step was critical for achieving the final score.
 
 ---
 
-##  How to Run
-
-```bash
-pip install pandas numpy lightgbm catboost scikit-learn
-python main.py
-
 
