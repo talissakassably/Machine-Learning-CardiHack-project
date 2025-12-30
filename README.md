@@ -1,4 +1,4 @@
-# Cardihack – Multimodal Risk Prediction (QWK 0.3626)
+# Cardihack – Multimodal Risk Prediction ( 0.3626)
 
 This repository contains my solution for the Cardihack challenge, focusing on predicting:
 - **OUTCOME MACE** (ordinal, 3 classes)
