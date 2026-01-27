@@ -242,6 +242,16 @@ The notebook mirrors `main.py` but is structured for experimentation and visuali
 
 ---
 
-## 10) Disclaimer
+## 10) Notes
+
+This solution prioritizes stability and interpretability.
+
+More complex approaches (deep learning, ordinal neural nets) were tested but did not outperform this pipeline under submission constraints.
+
+The KMeans consensus step was critical for achieving the final score.
+
+---
+
+## 11) Disclaimer
 
 This repository is intended for academic/research use in the context of the challenge dataset. It does **not** provide medical advice and should not be used for clinical decision-making without appropriate validation.
