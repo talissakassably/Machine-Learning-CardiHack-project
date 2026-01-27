@@ -24,6 +24,7 @@ Cardihack/
 ├─ submissions/
 │  └─ submission_KMEANS_BOOTSTRAP.csv  # output (created after running)
 ├─ README.md
+├─ poster.pdf # poster of our project
 └─ requirements.txt             # optional, create from instructions below
 ```
 
@@ -33,7 +34,7 @@ Cardihack/
 
 ## 2) Environment setup
 
-### Option A — Create a fresh virtual environment (recommended)
+### Create a fresh virtual environment (recommended)
 
 **Windows (PowerShell):**
 ```powershell
@@ -126,9 +127,9 @@ in the current working directory (or wherever you set it).
 A typical console run ends with:
 
 ```
-🔥 BEST QWK (val): <value>
-🔥 BEST WEIGHTS: (<w1>, <w2>, <w3>)
-🚀 submission_KMEANS_BOOTSTRAP.csv created
+ BEST QWK (val): <value>
+ BEST WEIGHTS: (<w1>, <w2>, <w3>)
+ submission_KMEANS_BOOTSTRAP.csv created
 ```
 
 ---
@@ -153,7 +154,7 @@ trustii_id,OUTCOME MACE,OUTCOME SEVERITY
 
 ---
 
-## 6) Method summary (what is implemented)
+## 6) Method summary
 
 ### 6.1 Preprocessing
 - **Median imputation** for all columns (`SimpleImputer(strategy="median")`)
