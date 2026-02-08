@@ -252,6 +252,3 @@ The KMeans consensus step was critical for achieving the final score.
 
 ---
 
-## 11) Disclaimer
-
-This repository is intended for academic/research use in the context of the challenge dataset. It does **not** provide medical advice and should not be used for clinical decision-making without appropriate validation.
